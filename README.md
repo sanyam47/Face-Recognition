@@ -1,2 +1,17 @@
-# Face-Recognition
-This MATLAB project integrates face recognition, RSA encryption, and email alerts into a smart security system. It trains a model to identify faces, encrypts identity data, and sends notifications upon detection. Ideal for surveillance or access control with added data protection.
+cam = webcam;
+faceDetector = vision.CascadeObjectDetector();
+videoPlayer = vision.VideoPlayer('Position', [100, 100, 640, 480]);
+
+while true
+    frame = snapshot(cam);
+    bbox = step(faceDetector, frame);
+    annotatedFrame = insertObjectAnnotation(frame, 'rectangle', bbox, 'Face');
+    step(videoPlayer, annotatedFrame);
+    
+    if ~isOpen(videoPlayer)
+        break;
+    end
+end
+
+clear cam;
+release(videoPlayer);
